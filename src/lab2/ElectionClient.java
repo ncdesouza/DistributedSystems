@@ -12,15 +12,27 @@ import java.rmi.registry.Registry;
 public class ElectionClient {
 
     public static void main(String[] args) {
-//        if (System.getSecurityManager() == null) {
-//            System.setSecurityManager(new SecurityManager());
-//        }
+
+        int port = 1099;
+        String host = null;
+        String name = "Election";
+
+        if (args.length > 3) {
+            host = args[3];
+            port = Integer.parseInt(args[4]);
+        }
 
         try {
-            String name = "Election";
-            Registry registry = LocateRegistry.getRegistry(1099);
+            // get the registry on the remote system
+            Registry registry = LocateRegistry.getRegistry(host, port);
+
+            // find the remote class from the remote registry
             Election election = (Election) registry.lookup(name);
-            election.vote("Nicholas", 1);
+
+            if (args[0].equals("vote"))
+                election.vote(args[1], Integer.parseInt(args[2]));
+            else if (args[0].equals("result"))
+                System.out.println(election.result());
 
         } catch (RemoteException e) {
             e.printStackTrace();

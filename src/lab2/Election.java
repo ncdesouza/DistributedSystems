@@ -28,6 +28,6 @@ public interface Election extends Remote {
      *      the client with the name of a candidate and the number of votes
      *      for that candidate.
      */
-    void result() throws RemoteException;
+    String result() throws RemoteException;
 
 }
