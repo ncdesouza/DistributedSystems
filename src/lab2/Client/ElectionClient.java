@@ -1,4 +1,7 @@
-package lab2;
+package lab2.Client;
+
+import lab2.AlreadyVotedException;
+import lab2.Election;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -11,39 +14,44 @@ import java.util.Arrays;
  * <brief description of class>
  */
 public class ElectionClient {
-    final String NAME = "Election";
+    protected final String NAME = "Election";
 
-    String host;
-    int port;
-    Election election;
-    Registry registry;
+    private String host;
+    private int port;
+    private Election election;
 
     public ElectionClient() throws RemoteException, NotBoundException {
         this.host = null;
         this.port = 1099;
-        this.registry = connectToRegistry();
         this.election = getRemoteObject();
     }
 
     public ElectionClient(String host, int port) throws RemoteException, NotBoundException {
         this.host = host;
         this.port = port;
-        this.registry = connectToRegistry();
         this.election = getRemoteObject();
     }
 
-    private Registry connectToRegistry() throws RemoteException {
-        Registry registry = LocateRegistry.getRegistry(this.host, this.port);
-        System.out.println(Arrays.toString(registry.list()));
-        return registry;
-    }
-
     private Election getRemoteObject() throws RemoteException, NotBoundException {
+        Registry registry = LocateRegistry.getRegistry(this.host, this.port);
         return (Election) registry.lookup(NAME);
     }
 
-    public void vote(String candidate, int voterNumber) throws RemoteException {
-        election.vote(candidate, voterNumber);
+    public void vote(String candidate, int voterNumber) {
+        Boolean voteSent = false;
+        while (!voteSent) {
+            try {
+                election.vote(candidate, voterNumber);
+                voteSent = true;
+                System.out.println("Your Vote has been sent for " + candidate + " " + Integer.toString(voterNumber));
+            } catch (RemoteException e) {
+                voteSent = false;
+                System.out.println("Your Vote could not be sent. Trying again...");
+            } catch (AlreadyVotedException e) {
+                System.out.println(e.getMessage());
+                voteSent = true;
+            }
+        }
     }
 
     public void result() throws RemoteException {

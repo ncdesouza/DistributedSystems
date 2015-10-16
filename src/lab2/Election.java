@@ -19,7 +19,7 @@ public interface Election extends Remote {
      * @param candidate A string that represents the name of the candidate.
      * @param voter_number A unique integer that represents the user's id
      */
-    void vote(String candidate, int voter_number) throws RemoteException;
+    void vote(String candidate, int voter_number) throws RemoteException, AlreadyVotedException;
 
 
     /**
