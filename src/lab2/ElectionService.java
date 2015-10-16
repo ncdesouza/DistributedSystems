@@ -49,6 +49,8 @@ public class ElectionService extends UnicastRemoteObject implements Election {
                 port = Integer.parseInt(args[1]);
         }
 
+        System.setProperty( "java.rmi.server.hostname", host ) ;
+
         // create registry name
         String registryName = "Election";
         // create registry url
