@@ -1,8 +1,9 @@
-package lab2.Server;
+package lab2.server;
 
 import lab2.AlreadyVotedException;
 import lab2.Election;
 
+import java.io.*;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.*;
@@ -19,16 +20,35 @@ public class ElectionService extends UnicastRemoteObject implements Election {
 
     public ElectionService() throws RemoteException{
         super();
-        votes = new HashMap<Integer, String>();
+
+        try {
+            votes = readFromDisk();
+        } catch (Exception e) {
+            votes = new HashMap<Integer, String>();
+        }
+    }
+
+    public HashMap<Integer, String> readFromDisk() throws IOException, ClassNotFoundException {
+        FileInputStream fin = new FileInputStream("./votes.ser");
+        ObjectInputStream ois = new ObjectInputStream(fin);
+        return (HashMap<Integer, String>) ois.readObject();
+    }
+
+
+    public void writeToDisk() throws IOException {
+        FileOutputStream fout = new FileOutputStream("./votes.ser");
+        ObjectOutputStream oos = new ObjectOutputStream(fout);
+        oos.writeObject(votes);
     }
 
     @Override
-    public void vote(String candidate, int voter_number) throws RemoteException, AlreadyVotedException {
-//        System.out.println(candidate + Integer.toString(voter_number));
+    public void vote(String candidate, int voter_number) throws IOException, AlreadyVotedException {
         if (votes.get(voter_number) == null)
             votes.put(voter_number, candidate);
         else
             throw new AlreadyVotedException("You have already voted");
+
+            writeToDisk();
     }
 
     @Override

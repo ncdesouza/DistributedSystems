@@ -5,7 +5,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 /**
- * Server:
+ * server:
  * <brief description of class>
  */
 public class Server {

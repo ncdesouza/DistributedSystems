@@ -1,4 +1,4 @@
-package lab2.Server;
+package lab2.server;
 
 import lab2.Election;
 
@@ -40,7 +40,7 @@ public class ElectionServer {
     public void run() throws MalformedURLException, RemoteException {
         setSystemProperties();
         setRegistry();
-        System.out.println("Election Server ready @ " + hostname + ":" + Integer.toString(port));
+        System.out.println("Election server ready @ " + hostname + ":" + Integer.toString(port));
     }
 
     public void stop() throws NoSuchObjectException {

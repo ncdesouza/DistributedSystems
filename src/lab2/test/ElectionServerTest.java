@@ -1,11 +1,9 @@
 package lab2.test;
 
-import lab2.Server.ElectionServer;
+import lab2.server.ElectionServer;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 /**
  * ElectionServerTest:

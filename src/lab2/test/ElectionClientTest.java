@@ -1,17 +1,13 @@
 package lab2.test;
 
-import lab2.Client.ElectionClient;
-import lab2.Server.ElectionServer;
+import lab2.client.ElectionClient;
+import lab2.server.ElectionServer;
 import org.junit.*;
 
-import java.net.MalformedURLException;
-import java.rmi.NoSuchObjectException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
-
-import static org.junit.Assert.*;
 
 /**
  * ElectionClientTest:

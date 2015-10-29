@@ -32,7 +32,7 @@ public class TCPClient {
 						out.flush();// UTF is a string encoding see Sn 4.3
                         in.readLine();
                     } catch (SocketTimeoutException e) {
-                        System.out.println("The Server did not respond");
+                        System.out.println("The server did not respond");
                     } catch (Exception e) {
 						System.out.println(e.getMessage());
 					}

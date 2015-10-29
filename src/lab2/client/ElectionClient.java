@@ -1,13 +1,13 @@
-package lab2.Client;
+package lab2.client;
 
 import lab2.AlreadyVotedException;
 import lab2.Election;
 
+import java.io.IOException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.util.Arrays;
 
 /**
  * ElectionClient:
@@ -45,11 +45,14 @@ public class ElectionClient {
                 voteSent = true;
                 System.out.println("Your Vote has been sent for " + candidate + " " + Integer.toString(voterNumber));
             } catch (RemoteException e) {
-                voteSent = false;
                 System.out.println("Your Vote could not be sent. Trying again...");
+                voteSent = false;
             } catch (AlreadyVotedException e) {
                 System.out.println(e.getMessage());
                 voteSent = true;
+            } catch (IOException e) {
+                System.out.println("Your Vote could not be sent. Trying again...");
+                voteSent = false;
             }
         }
     }
