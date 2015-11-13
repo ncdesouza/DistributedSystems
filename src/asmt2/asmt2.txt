@@ -1,0 +1,149 @@
+Assignment 2
+Nicholas De Souza 100473454
+
+1.  Outline the design of a scheme that uses message retransmissions with IP
+    multicast to overcome the problem of dropped messages. Your scheme should
+    take the following points into account:
+    [a]
+        (1)  there may be multiple senders;
+        (2)  only a small fraction of messages are dropped;
+        (3)  recipients may not necessarily send a message within any
+             particular time limit;
+        (4)  messages not dropped arrive in sender order.
+
+    [b] Does your solution in part [a] differ from the definition of reliable
+        multicast? If so, explain how.
+
+    ==== ANSWER ================================================================
+    [a]
+        (1) For multiple senders to retransmit messages, the sender must
+            encode a sequence number in the message. The receiver must decode
+            the sequence number and order the messages accordingly.
+
+        (2) Due to the fact that only a small fraction of messages are dropped,
+            the scheme will utilize a negative acknowledgement scheme. This
+            has the receiver only respond to the sender when it notices a
+            message is missing. To enable this scheme on the sender side, all
+            messages sent should be stored in the sender for retransmission, if
+            necessary.
+
+        (3) Due to the fact that this scheme involves the sender storing all
+            messages permanently a possible solution would be to have the
+            receiver ensure that its acknowledgement messages are sent inorder.
+            By maintaining order the sender can discard all messages that were
+            sent previous to the acknowledged message.
+
+        (4) ...
+
+    [b]
+        ...
+
+
+
+2.  Provide an application example for each of the following RPC exchange
+    handshakes and provide a reasoning of why that particular handshake is
+    suitable for the application you listed.
+
+    --------------------------------------------------------------------------
+                   |                    Messages sent by
+    ---------------|----------------------------------------------------------
+       Handshake   |    Client     |    Server     |    Client
+    ---------------|---------------|---------------|--------------------------
+           R       |    Request    |               |
+                   |               |               |
+           RR      |    Request    |    Reply      |
+                   |               |               |
+           RRA     |    Request    |    Reply      |    Acknowledge reply
+
+    ==== ANSWER ================================================================
+
+    R   - An example of this handshake is when a remote procedure call is executed
+          over a TCP network in which the remote method returns void.
+
+    RR  - An example of this handshake is a basic http service. The client will
+          request the page from the server and the server will server the page
+          and an error code in it's response.
+
+    RRA - An example of this handshake is when executing remote methods over UDP
+          and messages are sent from the client to the server, from the server
+          to the client and then back to the server acknowledging that the message
+          was received.
+
+
+
+3.  Show how to use Java reflection to construct the client proxy class for the
+    Election interface.Give the details of the implementation of one of the
+    methods in this class, which should call the method doOperation with the
+    following signature:
+
+        byte [] doOperation (RemoteObjectRef o, Method m, byte[] arguments);
+
+    Hint: an instance variable of the proxy class should hold a remote object
+          reference
+
+    The Election interface provides two remote methods:vote: with two parameters
+    through which the client supplies the name of a candidate (a string)and the
+    ‘voter’s number’ (an integer used to ensure each user votes once only).
+    The voter’s numbers are allocated sparsely from the range of integers to make
+    them hard to guess.result: with two parameters through which the server
+    supplies the client with the name of a candidate and the number of votes for
+    that candidate.
+
+    ==== ANSWER ===============================================================
+
+    import java.lang.reflect;
+
+    class VoteProxy {
+        RemoteObjectRef ref;
+        private static Method voteMethod;
+        private static Method resultMethod;
+
+        voteMethod = Election.class.getMethod("vote",
+            new Class[] {
+                java.lang.String.class,int.class
+            });
+
+        resultMethod = Election.class.getMethod("result", new Class[] {});
+    }
+
+    public void vote (String candidate, int voterNumber) throws RemoteException {
+        byte args [] = toByteArray(candidate, voteNumber);
+        byte result = doOperation(ref, voteMethod, args);
+    }
+
+
+
+4.  The Hello RMI example has been given to you in the examples folder.
+    Extend the programs to support RMI callback feature. Modify the clients so
+    that they provide a notify remote method.Modify the server so that it
+    provides two additional remote methods, registerForCallback and
+    unregisterForCallback. Each  new  client  registers  with  the  server  by
+    remote  invocation  of registerForCallbacks, and upon this event, the server
+    makes callbacks to notify method of all the current clients, informing them
+    of the current number of clients. The server must use a datastructure to
+    maintain the list of clients. The client should also let user specify the
+    length of time to remain registered, after this time expires, the clients
+    unregisters with the server.For details, see the "hello-callback.pdf"
+    document.You should provide screen shots of execution of your programs to
+    show that the RMI callback feature has been implemented.  You should also
+    show the code you have added to implement the RMI callback.
+
+    ==== ANSWER ===============================================================
+
+    Please refer to hello package included. For screenshots of functionality
+    refer to the assets folder.
+
+
+
+5.  In publish-subscribe systems, explain how channel-based approaches can
+    trivially be implemented using a group communication service?  Why is this
+    not a good strategy for implementing a content-based approach?
+
+
+    ==== ANSWER ===============================================================
+
+    This approach involves publishers publishing events to a specific channel
+    enabling subscribers to subscribe to the channel to receive all events sent
+    by the publisher. This is a rather primitive scheme and the only one that
+    defines a physical channel; all other schemes employ some form of filtering
+    over the content of events.

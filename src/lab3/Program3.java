@@ -21,7 +21,7 @@ public class Program3 {
         String inputFileName  = "data/lab3/text.in";
         int repeat = 1;
         String outputFileName = "data/lab3/program3.out";
-        int    numWorkers     = 100;
+        int    numWorkers     = 1000;
         FileIterator lines = null;
         try {
             lines = new FileIterator(inputFileName, 1);

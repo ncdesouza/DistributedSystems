@@ -1,7 +1,6 @@
 package lab3;
 
 import lab3.consumer.LineConsumer;
-import lab3.consumer.ResultConsumer;
 import lab3.producer.LineProducer;
 import lab3.utility.FileIterator;
 import lab3.utility.Line;
